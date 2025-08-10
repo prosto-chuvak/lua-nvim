@@ -1,0 +1,66 @@
+    Интерфейс и внешний вид
+'nvim-lualine/lualine.nvim'
+'nvim-tree/nvim-web-devicons'
+'rafi/awesome-vim-colorschemes'
+'ryanoasis/vim-devicons'
+
+    Навигация по файлам
+'preservim/nerdtree'
+'preservim/tagbar'
+
+    Редактирование
+'tpope/vim-surround'
+'tpope/vim-commentary'
+'ap/vim-css-color'
+'terryma/vim-multiple-cursors'
+'windwp/nvim-autopairs'
+
+    Терминал
+'tc50cal/vim-terminal'
+
+    LSP и автодополнение
+'neovim/nvim-lspconfig'
+'hrsh7th/nvim-cmp'
+'hrsh7th/cmp-nvim-lsp'
+'hrsh7th/cmp-buffer'
+'hrsh7th/cmp-path'
+'hrsh7th/cmp-cmdline'
+'hrsh7th/cmp-vsnip'
+'hrsh7th/vim-vsnip'
+
+    Вспомогательные утилиты
+'nvim-lua/plenary.nvim'
+'MunifTanjim/nui.nvim'
+'nvim-treesitter/nvim-treesitter'
+
+
+   ---------------------------------------------------------
+  -- LSP И АВТОДОПОЛНЯЛКИ
+  ---------------------------------------------------------
+  -- Collection of configurations for built-in LSP client
+  use 'neovim/nvim-lspconfig'
+  use 'williamboman/nvim-lsp-installer'
+
+  -- Автодополнялка
+  use 'hrsh7th/nvim-cmp'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'saadparwaiz1/cmp_luasnip'
+
+  --- Автодополнлялка к файловой системе
+  use 'hrsh7th/cmp-path'
+
+  -- Snippets plugin
+  use 'L3MON4D3/LuaSnip'
+
+  -- Highlight, edit, and navigate code using a fast incremental parsing library
+  use 'nvim-treesitter/nvim-treesitter'
+
+  -- Линтер, работает для всех языков
+  use 'dense-analysis/ale'
+  ---------------------------------------------------------
+  -- РАЗНОЕ
+  ---------------------------------------------------------
+  -- Даже если включена русская раскладка, то nvim-команды будут работать
+  use 'powerman/vim-plugin-ruscmd'
+end)
