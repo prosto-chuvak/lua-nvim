@@ -1,1 +1,1 @@
-This is my new configuration for nvim using lua and Packer.nvim.
+This is my configuration for nvim using lua and Packer.nvim.
