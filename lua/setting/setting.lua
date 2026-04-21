@@ -1,6 +1,5 @@
----------------------------------
--- Базовые настройки редактора --
----------------------------------
+-- MIGRATION: setting.lua - базовые настройки редактора
+-- Используется современный vim.opt API вместо vim.cmd('set ...')
 
 local opt = vim.opt
 
@@ -16,3 +15,4 @@ opt.mouse = 'a'
 opt.ignorecase = true
 opt.smartcase = true
 opt.clipboard:append('unnamedplus')
+opt.termguicolors = true -- MIGRATION: перенесено из plugins.lua
