@@ -161,7 +161,59 @@ M.plugins = {
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeClose", "NvimTreeFocus" },
 		keys = { { "<leader>e", ":NvimTreeToggle<CR>", desc = "Toggle NvimTree" } },
-		opts = {},
+		init = function()
+			-- Отключаем встроенный netrw файловый менеджер
+			vim.g.loaded_netrw = 1
+			vim.g.loaded_netrwPlugin = 1
+		end,
+		opts = {
+			-- Отключить netrw и использовать nvim-tree
+			disable_netrw = true,
+			hijack_netrw = true,
+			hijack_unnamed_buffer_when_opening = false,
+			
+			-- Синхронизация с текущей директорией
+			sync_root_with_cwd = true,
+			respect_buf_cwd = true,
+			update_focused_file = {
+				enable = true,
+				update_root = true,
+				ignore_list = {},
+			},
+			
+			-- Настройки представления
+			view = {
+				side = "left",
+				width = 30,
+				preserve_window_proportions = false,
+			},
+			
+			-- Фильтры (показывать только файлы проекта)
+			filters = {
+				enable = true,
+				dotfiles = false,
+				custom = {},
+				exclude = {},
+			},
+			
+			-- Git интеграция
+			git = {
+				enable = true,
+				ignore = true,
+			},
+			
+			-- Действия при открытии файла
+			actions = {
+				open_file = {
+					quit_on_open = false,
+					resize_window = true,
+				},
+				change_dir = {
+					enable = true,
+					global = false,
+				},
+			},
+		},
 	},
 
 	-- ==========================

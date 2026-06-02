@@ -1,1 +1,1 @@
-Nothing should be ignored based on the provided file changes. The only modified file is `lua/plugins/plugins.lua`, which is a source code file and should not be added to .gitignore.
+(lua/keymaps/keymaps-plugins.lua, lua/plugins/plugins.lua)
