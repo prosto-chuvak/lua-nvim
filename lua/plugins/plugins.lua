@@ -29,9 +29,54 @@ M.plugins = {
 				cmp = true,
 				gitsigns = true,
 				nvimtree = true,
-				telescope = true,
+				telescope = { enabled = true },
 				bufferline = true,
 				lualine = true,
+				treesitter = true,
+				native_lsp = {
+					enabled = true,
+					virtual_text = {
+						errors = { "italic" },
+						hints = { "italic" },
+						warnings = { "italic" },
+						information = { "italic" },
+					},
+					underlines = {
+						errors = { "underline" },
+						hints = { "underline" },
+						warnings = { "underline" },
+						information = { "underline" },
+					},
+				},
+				which_key = true,
+				mason = true,
+				aerial = true,
+				alpha = false,
+				dashboard = false,
+				flash = true,
+				fugitive = true,
+				gitgutter = false,
+				grug_far = false,
+				harpoon = true,
+				headlines = false,
+				illuminate = true,
+				indent_blankline = { enabled = true },
+				leap = false,
+				lightspeed = false,
+				lsp_trouble = true,
+				markdown = true,
+				mini = true,
+				neogit = true,
+				neotest = true,
+				neotree = false,
+				noice = true,
+				notify = true,
+				semantic_tokens = true,
+				snacks = false,
+				treesitter_context = true,
+				ufo = true,
+				vim_sneer = false,
+				window_picker = false,
 			},
 		},
 		config = function(_, opts)
@@ -171,24 +216,85 @@ M.plugins = {
 			disable_netrw = true,
 			hijack_netrw = true,
 			hijack_unnamed_buffer_when_opening = false,
+			hijack_directories = {
+				enable = true,
+				auto_open = true,
+			},
 			
-			-- Синхронизация с текущей директорией
+			-- ВАЖНО: Показывать ТОЛЬКО содержимое открытой папки
+			-- Фиксируем корень на текущей директории, без подъема выше
+			root_dirs = {},
+			prefer_startup_root = true,
 			sync_root_with_cwd = true,
 			respect_buf_cwd = true,
+			
+			-- Обновлять корень при переключении файлов, но только в пределах проекта
 			update_focused_file = {
 				enable = true,
-				update_root = true,
+				update_root = false, -- Не менять корень динамически
 				ignore_list = {},
 			},
 			
-			-- Настройки представления
+			-- Настройки вида - показывать только текущую папку
 			view = {
 				side = "left",
 				width = 30,
 				preserve_window_proportions = false,
+				float = {
+					enable = false,
+				},
+				adaptive_size = false,
+				center_last = false,
+				number = false,
+				relativenumber = false,
+				-- Скрыть информацию о корне, чтобы не было видно пути выше
+				mappings = {
+					custom_only = false,
+					list = {},
+				},
 			},
 			
-			-- Фильтры (показывать только файлы проекта)
+			-- Рендерер - минималистичный вид
+			renderer = {
+				root_folder_label = false, -- Не показывать полный путь корня
+				indent_markers = {
+					enable = false,
+					inline_arrows = true,
+				},
+				icons = {
+					show = {
+						file = true,
+						folder = true,
+						folder_arrow = true,
+						git = true,
+					},
+					glyphs = {
+						default = "󰈚",
+						symlink = "",
+						folder = {
+							default = "",
+							open = "",
+							empty = "",
+							empty_open = "",
+							symlink = "",
+							symlink_open = "",
+							arrow_open = "",
+							arrow_closed = "",
+						},
+						git = {
+							unstaged = "✗",
+							staged = "✓",
+							unmerged = "",
+							renamed = "➜",
+							untracked = "★",
+							deleted = "✖",
+							ignored = "◌",
+						},
+					},
+				},
+			},
+			
+			-- Фильтры
 			filters = {
 				enable = true,
 				dotfiles = false,
@@ -200,20 +306,90 @@ M.plugins = {
 			git = {
 				enable = true,
 				ignore = true,
+				timeout = 400,
 			},
 			
-			-- Действия при открытии файла
+			-- Действия
 			actions = {
 				open_file = {
 					quit_on_open = false,
 					resize_window = true,
+					window_picker = {
+						enable = true,
+						characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+						exclude = {
+							filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
+							buftype = { "nofile", "terminal", "help" },
+						},
+					},
 				},
 				change_dir = {
-					enable = true,
+					enable = false, -- Не менять cwd при навигации
 					global = false,
+					above = false,
+				},
+				use_system_clipboard = true,
+				remove_files = {
+					trash = true,
+					cleanup_empty_dir = false,
 				},
 			},
+			
+			-- Filesystem watchers
+			filesystem_watchers = {
+				enable = true,
+				debounce_delay = 50,
+				ignore_dirs = {},
+			},
+			
+			-- Диагностика
+			diagnostics = {
+				enable = false,
+				show_on_dirs = false,
+				icons = {
+					hint = "",
+					info = "",
+					warning = "",
+					error = "",
+				},
+			},
+			
+			-- Live filter
+			live_filter = {
+				prefix = "[FILTER]: ",
+				always_show_folders = true,
+			},
+			
+			-- Табы
+			tab = {
+				sync = {
+					open = false,
+					close = false,
+					create = false,
+				},
+			},
+			
+			-- Буфер
+			bufnum_sync = false,
+			
+			-- Не создавать файлы в закрытых папках
+			create_in_closed_folder = false,
+			
+			-- Сортировка
+			sort_by = "name",
+			sort_function = nil,
 		},
+		config = function(_, opts)
+			require("nvim-tree").setup(opts)
+			-- Принудительно установить корень в текущую директорию при запуске
+			vim.api.nvim_create_autocmd("VimEnter", {
+				callback = function()
+					local tree = require("nvim-tree.api")
+					-- Синхронизировать корень дерева с текущей рабочей директорией
+					tree.tree.change_root_to_current_dir()
+				end,
+			})
+		end,
 	},
 
 	-- ==========================
