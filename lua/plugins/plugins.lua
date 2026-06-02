@@ -15,11 +15,28 @@ M.plugins = {
 	-- ЦВЕТОВЫЕ СХЕМЫ (priority)
 	-- ==========================
 	{
-		"Shatur/neovim-ayu",
+		"catppuccin/nvim",
+		name = "catppuccin",
 		priority = 1000, -- Загружается ДО всех UI-плагинов
 		lazy = false,  -- Не ленивая загрузка для colorscheme
-		config = function()
-			vim.cmd("colorscheme ayu")
+		opts = {
+			flavour = "mocha",
+			background = {
+				light = "latte",
+				dark = "mocha",
+			},
+			integrations = {
+				cmp = true,
+				gitsigns = true,
+				nvimtree = true,
+				telescope = true,
+				bufferline = true,
+				lualine = true,
+			},
+		},
+		config = function(_, opts)
+			require("catppuccin").setup(opts)
+			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
 
@@ -35,7 +52,7 @@ M.plugins = {
 		opts = {
 			options = {
 				icons_enabled = true,
-				theme = "ayu",
+				theme = "catppuccin",
 				component_separators = { left = "", right = "" },
 				section_separators = { left = "", right = "" },
 				disabled_filetypes = { statusline = {}, winbar = {} },
@@ -90,10 +107,11 @@ M.plugins = {
 	-- ==========================
 	{
 		"akinsho/bufferline.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
+		dependencies = { "nvim-tree/nvim-web-devicons", "catppuccin/nvim" },
 		event = "VeryLazy",
 		opts = {
 			options = {
+				theme = "catppuccin",
 				numbers = "none",
 				close_command = "bdelete! %d",
 				right_mouse_command = "bdelete! %d",
