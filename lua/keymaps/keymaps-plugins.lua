@@ -6,6 +6,17 @@ local map = vim.keymap.set
 -- NvimTree
 map('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true, desc = 'Toggle NvimTree' })
 
+-- Автооткрытие NvimTree при запуске с папкой
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = function()
+		-- Проверяем, что запущен не в режиме одного файла
+		local stats = vim.loop.fs_stat(vim.fn.argv(0))
+		if stats and stats.type == "directory" then
+			vim.cmd("NvimTreeOpen")
+		end
+	end,
+})
+
 -- Bufferline
 map('n', '<leader>w', ':BufferLineCycleNext<CR>', { noremap = true, silent = true, desc = 'Next buffer' })
 map('n', '<leader>s', ':BufferLineCyclePrev<CR>', { noremap = true, silent = true, desc = 'Prev buffer' })
